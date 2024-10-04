@@ -88,7 +88,8 @@
     }
 
     @include respond(lg) {
-        padding-top: var(--main-top-padding);
+        // padding-top: var(--main-top-padding);
+        padding-top: var(--sidebar-element-separation);
         padding-bottom: var(--main-top-padding);
     }
 }
