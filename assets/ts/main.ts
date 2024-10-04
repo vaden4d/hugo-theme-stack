@@ -12,6 +12,7 @@ import createElement from 'ts/createElement';
 import StackColorScheme from 'ts/colorScheme';
 import { setupScrollspy } from 'ts/scrollspy';
 import { setupSmoothAnchors } from "ts/smoothAnchors";
+import ColorSchemeToggle from 'ts/colorSchemeToggle';
 
 let Stack = {
     init: () => {
@@ -96,10 +97,13 @@ let Stack = {
 }
 
 window.addEventListener('load', () => {
-    setTimeout(function () {
-        Stack.init();
-    }, 0);
-})
+    const colorScheme = new StackColorScheme();
+    const emoji = document.querySelector('#color-scheme-toggle') as HTMLElement;
+    if (emoji) {
+        new ColorSchemeToggle(emoji, colorScheme);
+    }
+    Stack.init();
+});
 
 declare global {
     interface Window {

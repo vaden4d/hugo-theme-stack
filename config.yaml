@@ -11,7 +11,7 @@ params:
     favicon:
 
     footer:
-        since:
+        since: 2024
         customText:
 
     dateFormat:
@@ -20,8 +20,8 @@ params:
 
     sidebar:
         compact: false
-        emoji:
-        subtitle:
+        emoji: ☀️
+        subtitle: 
         avatar:
             enabled: true
             local: true

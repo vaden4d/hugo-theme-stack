@@ -6,29 +6,23 @@
     </button>
 
     <header>
-        {{ with .Site.Params.sidebar.avatar }}
-            {{ if (default true .enabled) }}
-            <figure class="site-avatar">
-                <a href="{{ .Site.BaseURL | relLangURL }}">
-                {{ if not .local }}
-                    <img src="{{ .src }}" width="300" height="300" class="site-logo" loading="lazy" alt="Avatar">
+        {{ if .Site.Params.sidebar.avatar.enabled }}
+        <figure class="site-avatar">
+            <a href="{{ .Site.BaseURL | relLangURL }}">
+                {{ if not .Site.Params.sidebar.avatar.local }}
+                    <img src="{{ .Site.Params.sidebar.avatar.src }}" width="{{ .Site.Params.sidebar.avatar.width }}" height="{{ .Site.Params.sidebar.avatar.height }}" class="site-logo" loading="lazy" alt="Avatar">
                 {{ else }}
-                    {{ $avatar := resources.Get (.src) }}
-                    
+                    {{ $avatar := resources.Get .Site.Params.sidebar.avatar.src }}
                     {{ if $avatar }}
                         {{ $avatarResized := $avatar.Resize "300x" }}
-                        <img src="{{ $avatarResized.RelPermalink }}" width="{{ $avatarResized.Width }}"
-                            height="{{ $avatarResized.Height }}" class="site-logo" loading="lazy" alt="Avatar">
+                        <img src="{{ $avatarResized.RelPermalink }}" width="{{ .Site.Params.sidebar.avatar.width }}" height="{{ .Site.Params.sidebar.avatar.height }}" class="site-logo" loading="lazy" alt="Avatar">
                     {{ else }}
-                        {{ errorf "Failed loading avatar from %q" . }}
+                        {{ errorf "Failed loading avatar from %q" .Site.Params.sidebar.avatar.src }}
                     {{ end }}
                 {{ end }}
-                </a>
-                {{ with $.Site.Params.sidebar.emoji }}
-                    <span class="emoji">{{ . }}</span>
-                {{ end }}
-            </figure>
-            {{ end }}
+            </a>
+            <span class="emoji" id="color-scheme-toggle">☀️</span>
+        </figure>
         {{ end }}
         
         <div class="site-meta">
@@ -38,19 +32,15 @@
     </header>
 
     {{- with .Site.Menus.social -}}
-        <ol class="menu-social">
+        <ol class="social-menu">
             {{ range . }}
                 <li>
                     <a 
                         href='{{ .URL }}'
-                        {{ if eq (default true .Params.newTab) true }}target="_blank"{{ end }}
+                        {{ if eq .Params.newTab true }}target="_blank"{{ end }}
                         {{ with .Name }}title="{{ . }}"{{ end }}
-                        rel="me"
                     >
-                        {{ $icon := default "link" .Params.Icon }}
-                        {{ with $icon }}
-                            {{ partial "helper/icon" . }}
-                        {{ end }}
+                        {{ partial "helper/icon" .Params.Icon }}
                     </a>
                 </li>
             {{ end }}
@@ -62,42 +52,11 @@
         {{ range .Site.Menus.main }}
         {{ $active := or (eq $currentPage.Title .Name) (or ($currentPage.HasMenuCurrent "main" .) ($currentPage.IsMenuCurrent "main" .)) }}
         <li {{ if $active }} class='current' {{ end }}>
-            <a href='{{ .URL }}' {{ if eq .Params.newTab true }}target="_blank"{{ end }}>
-                {{ $icon := default .Pre .Params.Icon }}
-                {{ if .Pre }}
-                    {{ warnf "Menu item [%s] is using [pre] field to set icon, please use [params.icon] instead.\nMore information: https://stack.jimmycai.com/config/menu" .URL }}
-                {{ end }}
-                {{ with $icon }}
-                    {{ partial "helper/icon" . }}
-                {{ end }}
+            <a href='{{ .URL | relLangURL }}'>
+                {{ partial "helper/icon" .Params.Icon }}
                 <span>{{- .Name -}}</span>
             </a>
         </li>
         {{ end }}
-        <li class="menu-bottom-section">
-            <ol class="menu">
-                {{- $currentLanguageCode := .Language.Lang -}}
-                {{ if ( compare.Gt .Site.Home.AllTranslations.Len 1 ) }}
-                    {{ with .Site.Home.AllTranslations }}
-                        <li id="i18n-switch">  
-                            {{ partial "helper/icon" "language" }}
-                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
-                                {{ range . }}
-                                    <option value="{{ .Permalink }}" {{ if eq .Language.Lang $currentLanguageCode }}selected{{ end }}>{{ .Language.LanguageName }}</option>
-                                {{ end }}
-                            </select>
-                        </li>
-                    {{ end }}
-                {{ end }}
-
-                {{ if (default false .Site.Params.colorScheme.toggle) }}
-                    <li id="dark-mode-toggle">
-                        {{ partial "helper/icon" "toggle-left" }}
-                        {{ partial "helper/icon" "toggle-right" }}
-                        <span>{{ T "darkMode" }}</span>
-                    </li>
-                {{ end }}
-            </ol>
-        </li>
     </ol>
 </aside>
