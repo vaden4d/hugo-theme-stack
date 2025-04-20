@@ -8,19 +8,17 @@
     <header>
         {{ if .Site.Params.sidebar.avatar.enabled }}
         <figure class="site-avatar">
-            <a href="{{ .Site.BaseURL | relLangURL }}">
-                {{ if not .Site.Params.sidebar.avatar.local }}
-                    <img src="{{ .Site.Params.sidebar.avatar.src }}" width="{{ .Site.Params.sidebar.avatar.width }}" height="{{ .Site.Params.sidebar.avatar.height }}" class="site-logo" loading="lazy" alt="Avatar">
+            {{ if not .Site.Params.sidebar.avatar.local }}
+                <img src="{{ .Site.Params.sidebar.avatar.src }}" width="{{ .Site.Params.sidebar.avatar.width }}" height="{{ .Site.Params.sidebar.avatar.height }}" class="site-logo" loading="lazy" alt="Avatar">
+            {{ else }}
+                {{ $avatar := resources.Get .Site.Params.sidebar.avatar.src }}
+                {{ if $avatar }}
+                    {{ $avatarResized := $avatar.Resize "300x" }}
+                    <img src="{{ $avatarResized.RelPermalink }}" width="{{ .Site.Params.sidebar.avatar.width }}" height="{{ .Site.Params.sidebar.avatar.height }}" class="site-logo" loading="lazy" alt="Avatar">
                 {{ else }}
-                    {{ $avatar := resources.Get .Site.Params.sidebar.avatar.src }}
-                    {{ if $avatar }}
-                        {{ $avatarResized := $avatar.Resize "300x" }}
-                        <img src="{{ $avatarResized.RelPermalink }}" width="{{ .Site.Params.sidebar.avatar.width }}" height="{{ .Site.Params.sidebar.avatar.height }}" class="site-logo" loading="lazy" alt="Avatar">
-                    {{ else }}
-                        {{ errorf "Failed loading avatar from %q" .Site.Params.sidebar.avatar.src }}
-                    {{ end }}
+                    {{ errorf "Failed loading avatar from %q" .Site.Params.sidebar.avatar.src }}
                 {{ end }}
-            </a>
+            {{ end }}
             <span class="emoji" id="color-scheme-toggle">☀️</span>
         </figure>
         {{ end }}
