@@ -26,3 +26,12 @@
 
 @import "general.scss";
 @import "custom.scss";
+
+.site-avatar,
+.site-avatar img,
+#color-scheme-toggle {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
