@@ -92,6 +92,16 @@
     flex-direction: column;
     color: var(--card-text-color-main);
     overflow: hidden;
+    margin-top: 0px;
+
+    .toc-title {
+        padding: 15px 20px;
+        font-size: 1.6rem;
+        font-weight: normal;
+        color: var(--card-text-color-main);
+        background: var(--card-background);
+        border-bottom: 1px solid var(--card-separator-color);
+    }
 
     ::-webkit-scrollbar-thumb {
         background-color: var(--card-separator-color);

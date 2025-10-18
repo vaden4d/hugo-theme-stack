@@ -9,6 +9,10 @@ class StackColorScheme {
         this.bindMatchMedia();
         this.currentScheme = this.getSavedScheme();
         this.setBodyClass();
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches === true)
+            this.systemPreferScheme = 'dark'
+        else
+            this.systemPreferScheme = 'light';
     }
 
     public setColorScheme(scheme: colorScheme) {

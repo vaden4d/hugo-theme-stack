@@ -3,9 +3,8 @@
         <!-- <div class="widget-icon">
             {{ partial "helper/icon" "hash" }}
         </div> -->
-        <h2 class="widget-title section-title">{{ T "article.tableOfContents" }}</h2>
-        
         <div class="widget--toc">
+            <div class="toc-title">{{ T "article.tableOfContents" }}</div>
             {{ .Context.TableOfContents }}
         </div>
     </section>
