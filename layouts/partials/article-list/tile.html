@@ -1,7 +1,12 @@
 {{ $image := partialCached "helper/image" (dict "Context" .context "Type" .Type) .context.RelPermalink .Type }}
-<article class="{{ if $image.exists }}has-image{{ end }}">
+{{- $isTaxonomy := eq .Type "taxonomy" -}}
+{{- $taxColors := dict -}}
+{{- if $isTaxonomy -}}
+    {{- $taxColors = partial "helper/taxonomy-term-colors" (dict "term" .context "taxonomy" "categories") -}}
+{{- end -}}
+<article class="{{ if $image.exists }}has-image {{ end }}{{ if $isTaxonomy }}taxonomy-archives-tile{{ end }}" {{ if $isTaxonomy }}style="--taxonomy-accent: {{ $taxColors.background }};"{{ end }}>
     <a href="{{ .context.RelPermalink }}">
-        
+
         {{ if $image.exists }}
             <div class="article-image">
                 {{ if $image.resource }}
@@ -16,10 +21,10 @@
                         {{- $Width = $thumbnail.Width -}}
                         {{- $Height = $thumbnail.Height -}}
                     {{- end -}}
-                    
-                    <img src="{{ $Permalink }}" 
-                        width="{{ $Width }}" 
-                        height="{{ $Height }}" 
+
+                    <img src="{{ $Permalink }}"
+                        width="{{ $Width }}"
+                        height="{{ $Height }}"
                         loading="lazy"
                         alt="Featured image of post {{ .context.Title }}"
                         {{ with .context.Slug }}data-key="{{ . }}" {{ end }}
@@ -30,7 +35,7 @@
             </div>
         {{ end }}
 
-        <div class="article-details">
+        <div class="article-details{{ if $isTaxonomy }} taxonomy-tile-details{{ end }}">
             <h2 class="article-title">
                 {{- .context.Title -}}
             </h2>

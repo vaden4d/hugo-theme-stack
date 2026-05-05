@@ -1,0 +1,53 @@
+{{- /*
+  Input dict: term (Page), taxonomy ("categories" | "tags")
+  Returns dict: background, color
+  Site config: params.taxonomyColors (Hugo stores as taxonomycolors) — palette, categories, tags maps.
+  Map keys: urlized term slug (e.g. computer-science).
+*/ -}}
+{{- $term := .term -}}
+{{- $taxonomy := .taxonomy -}}
+{{- $site := $term.Site -}}
+
+{{- $defaultPalette := slice "#155dfc" "#00c853" "#ff6d00" "#a855f7" "#ec4899" "#06b6d4" "#6366f1" "#f59e0b" "#0ea5e9" "#ef4444" "#8b5cf6" "#22c55e" -}}
+{{- $tc := index $site.Params "taxonomycolors" | default dict -}}
+{{- $palette := default $defaultPalette $tc.palette -}}
+
+{{- $bg := "" -}}
+{{- $fg := "#ffffff" -}}
+
+{{- with $term.Params.style -}}
+    {{- with .background -}}{{- $bg = . -}}{{- end -}}
+    {{- with .color -}}{{- $fg = . -}}{{- end -}}
+{{- end -}}
+
+{{- if eq $bg "" -}}
+    {{- $map := dict -}}
+    {{- if eq $taxonomy "categories" -}}
+        {{- $map = default dict $tc.categories -}}
+    {{- else if eq $taxonomy "tags" -}}
+        {{- $map = default dict $tc.tags -}}
+    {{- end -}}
+    {{- if $map -}}
+        {{- $slugKey := urlize $term.Data.Term -}}
+        {{- with index $map $slugKey -}}
+            {{- $bg = . -}}
+        {{- else -}}
+            {{- with index $map $term.Title -}}
+                {{- $bg = . -}}
+            {{- else -}}
+                {{- with index $map ($term.Data.Term | lower) -}}
+                    {{- $bg = . -}}
+                {{- end -}}
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+
+{{- if eq $bg "" -}}
+    {{- $slug := urlize $term.Data.Term -}}
+    {{- $h := int (math.Abs (float (hash.FNV32a $slug))) -}}
+    {{- $idx := mod $h (len $palette) -}}
+    {{- $bg = index $palette $idx -}}
+{{- end -}}
+
+{{- return dict "background" $bg "color" $fg -}}

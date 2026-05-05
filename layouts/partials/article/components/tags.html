@@ -1,7 +1,8 @@
 {{ if .Params.Tags }}
     <section class="article-tags">
         {{ range (.GetTerms "tags") }}
-            <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+            {{- $c := partial "helper/taxonomy-term-colors" (dict "term" . "taxonomy" "tags") -}}
+            <a href="{{ .RelPermalink }}" class="taxonomy-chip taxonomy-chip--tag" style="--taxonomy-chip-bg: {{ $c.background }}; --taxonomy-chip-fg: {{ $c.color }}; background-color: var(--taxonomy-chip-bg); color: var(--taxonomy-chip-fg);">{{ .LinkTitle }}</a>
         {{ end }}
     </section>
 {{ end }}

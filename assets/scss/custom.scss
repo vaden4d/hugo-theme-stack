@@ -1,1 +1,28 @@
-/* Place your custom SCSS in HUGO_SITE_FOLDER/assets/scss/custom.scss */
+/* Taxonomy chips (categories & tags) — vivid accents; site can override via params.taxonomyColors */
+
+.taxonomy-chip {
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.article-category a.taxonomy-chip:hover,
+.article-tags a.taxonomy-chip:hover {
+    background-color: color-mix(in srgb, var(--taxonomy-chip-bg) 82%, #000) !important;
+    color: var(--taxonomy-chip-fg) !important;
+}
+
+.tagCloud-tags a.widget-taxonomy-chip {
+    box-shadow: var(--shadow-l1);
+    border: none;
+
+    &:hover {
+        background-color: color-mix(in srgb, var(--taxonomy-chip-bg) 82%, #000) !important;
+        color: var(--taxonomy-chip-fg) !important;
+        box-shadow: var(--shadow-l2);
+    }
+}
+
+.template-archives .taxonomy-archives-tile .taxonomy-tile-details {
+    border-left: 4px solid var(--taxonomy-accent);
+    padding-left: 12px;
+    margin-left: 2px;
+}

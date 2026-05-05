@@ -8,7 +8,8 @@
 
     <div class="tagCloud-tags">
         {{ range first $limit $context.Site.Taxonomies.tags.ByCount }}
-            <a href="{{ .Page.RelPermalink }}">
+            {{- $c := partial "helper/taxonomy-term-colors" (dict "term" .Page "taxonomy" "tags") -}}
+            <a href="{{ .Page.RelPermalink }}" class="taxonomy-chip taxonomy-chip--tag widget-taxonomy-chip" style="--taxonomy-chip-bg: {{ $c.background }}; --taxonomy-chip-fg: {{ $c.color }}; background-color: var(--taxonomy-chip-bg); color: var(--taxonomy-chip-fg);">
                 {{ .Page.Title }}
             </a>
         {{ end }}

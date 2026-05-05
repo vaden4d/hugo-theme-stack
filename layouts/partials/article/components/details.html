@@ -2,7 +2,8 @@
     {{ if .Params.categories }}
     <header class="article-category">
         {{ range (.GetTerms "categories") }}
-            <a href="{{ .RelPermalink }}" {{ with .Params.style }}style="background-color: {{ .background }}; color: {{ .color }};"{{ end }}>
+            {{- $c := partial "helper/taxonomy-term-colors" (dict "term" . "taxonomy" "categories") -}}
+            <a href="{{ .RelPermalink }}" class="taxonomy-chip taxonomy-chip--category" style="--taxonomy-chip-bg: {{ $c.background }}; --taxonomy-chip-fg: {{ $c.color }}; background-color: var(--taxonomy-chip-bg); color: var(--taxonomy-chip-fg);">
                 {{ .LinkTitle }}
             </a>
         {{ end }}
@@ -15,7 +16,7 @@
                 {{- .Title -}}
             </a>
         </h2>
-    
+
         {{ with .Params.description }}
         <h3 class="article-subtitle">
             {{ . }}
