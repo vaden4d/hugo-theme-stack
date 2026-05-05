@@ -9,12 +9,12 @@
         {{ if .Site.Params.sidebar.avatar.enabled }}
         <figure class="site-avatar">
             {{ if not .Site.Params.sidebar.avatar.local }}
-                <img src="{{ .Site.Params.sidebar.avatar.src }}" width="{{ .Site.Params.sidebar.avatar.width }}" height="{{ .Site.Params.sidebar.avatar.height }}" class="site-logo" loading="lazy" alt="Avatar">
+                <img src="{{ .Site.Params.sidebar.avatar.src }}" width="{{ .Site.Params.sidebar.avatar.width }}" height="{{ .Site.Params.sidebar.avatar.height }}" class="site-logo" loading="eager" decoding="async" fetchpriority="high" alt="Avatar">
             {{ else }}
                 {{ $avatar := resources.Get .Site.Params.sidebar.avatar.src }}
                 {{ if $avatar }}
                     {{ $avatarResized := $avatar.Resize "300x" }}
-                    <img src="{{ $avatarResized.RelPermalink }}" width="{{ .Site.Params.sidebar.avatar.width }}" height="{{ .Site.Params.sidebar.avatar.height }}" class="site-logo" loading="lazy" alt="Avatar">
+                    <img src="{{ $avatarResized.RelPermalink }}" width="{{ .Site.Params.sidebar.avatar.width }}" height="{{ .Site.Params.sidebar.avatar.height }}" class="site-logo" loading="eager" decoding="async" fetchpriority="high" alt="Avatar">
                 {{ else }}
                     {{ errorf "Failed loading avatar from %q" .Site.Params.sidebar.avatar.src }}
                 {{ end }}
@@ -51,8 +51,10 @@
         {{ $active := or (eq $currentPage.RelPermalink .URL) (or ($currentPage.HasMenuCurrent "main" .) ($currentPage.IsMenuCurrent "main" .)) }}
         <li {{ if $active }} class='current' {{ end }}>
             <a href='{{ .URL | relLangURL }}'>
-                {{ partial "helper/icon" .Params.Icon }}
-                <span>{{- .Name -}}</span>
+                <span class="main-menu-link-inner">
+                    {{ partial "helper/icon" .Params.Icon }}
+                    <span class="main-menu-link-text">{{- .Name -}}</span>
+                </span>
             </a>
         </li>
         {{ end }}
